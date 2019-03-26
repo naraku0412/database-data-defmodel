@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: database
+  name: getmodel-proxy
+spec:
+  selector:
+    app: database-getmodel
+  type: NodePort
+  #type: ClusterIP
+  ports:
+    - name: getmodeldef 
+      port: 8882
+      targetPort: 8882
+      nodePort: 9092
+      protocol: TCP

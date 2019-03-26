@@ -26,8 +26,8 @@ public class AppSet
      }
    public static void main(String args[]) throws Exception {
      CommandLineParser parser = new BasicParser( );
-     String keyInput  = "";
-     String ipInput = "";
+     String keyInput  = "getmodel";
+     String ipInput = "127.0.0.1";
      Options options = new Options();
 
      options.addOption("k","keyInput", true, "The input key");
@@ -41,12 +41,13 @@ public class AppSet
      }
 
 
-     File file=new File("/workspace/getModelDef");
+     File file=new File("/workspaced/getModelDef");
      String content= FileUtils.readFileToString(file,"UTF-8");
      JSONObject jsonObject=new JSONObject(content);
      String js = jsonObject.toString();
-     //System.out.println(jsonObject.toString());
+     //System.out.println(jsonObject.toString())
      Jedis jedis = new Jedis(ipInput);
      jedis.set(keyInput,js);
+     logger.info("The data is set in the database!");
     }
 }    

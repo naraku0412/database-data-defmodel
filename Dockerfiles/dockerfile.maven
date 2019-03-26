@@ -1,0 +1,3 @@
+FROM gmt.reg.me/test/maven-dependency:v1
+RUN mkdir -p  /workspaced
+ADD ./scripts/getModelDef  /workspaced/getModelDef

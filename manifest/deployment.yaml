@@ -1,6 +1,8 @@
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
+  labels:
+    app: database-getmodel
   name: database-getmodel
   namespace: database
 spec:
@@ -11,8 +13,9 @@ spec:
         app: database-getmodel
     spec:
       containers:
+        #maven
         - name: getmodel
-          image: gmt.reg.me/frame/maven-dependency:v2
+          image: gmt.reg.me/frame/maven-getmodel
           command:
             - /bin/sh
           args:
@@ -30,7 +33,34 @@ spec:
               mountPath: /project/src/main/java/com/app/AppGet.java
               subPath: AppGet.java
               readOnly: true
-
+            - name: share-jar
+              mountPath: /workspace
+        - name: redis1
+          image: redis:5
+          imagePullPolicy: IfNotPresent
+       #server
+        - name: server
+          image: gmt.reg.me/frame/jn-getmodel
+          command:
+            - node
+          args:
+            - /workspace/server.js
+          volumeMounts:
+            - name: database-getmodel-server
+              mountPath: /workspace/server.js
+              subPath: server.js
+              readOnly: true
+            - name: database-getmodel-modelset
+              mountPath: /workspace/modelset.sh
+              subPath: modelset.sh
+              readOnly: true
+            - name: database-getmodel-modelget
+              mountPath: /workspace/modelget.sh
+              subPath: modelget.sh
+              readOnly: true
+            - name: share-jar
+              mountPath: /workspace
+            
       volumes:
         - name: database-getmodel-pack
           configMap:
@@ -44,4 +74,17 @@ spec:
           configMap:
             name: database-getmodel-get
             defaultMode: 0755
-
+        - name: database-getmodel-server
+          configMap:
+            name: database-getmodel-server
+            defaultMode: 0755
+        - name: database-getmodel-modelset
+          configMap:
+            name: database-getmodel-modelset
+            defaultMode: 0755
+        - name: database-getmodel-modelget
+          configMap:
+            name: database-getmodel-modelget
+            defaultMode: 0755
+        - name: share-jar
+          emptyDir: {}

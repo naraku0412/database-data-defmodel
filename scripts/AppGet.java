@@ -28,8 +28,8 @@ public class AppGet
    public static void main(String args[]) throws Exception {
      
      CommandLineParser parser = new BasicParser( );
-     String keyInput  = "";
-     String ipInput = "";
+     String keyInput  = "getmodel";
+     String ipInput = "127.0.0.1";
      Options options = new Options();
 
      options.addOption("k","keyInput", true, "The input key");
@@ -46,7 +46,8 @@ public class AppGet
      
      String js = jedis.get(keyInput);
      if(js!=null){
-       logger.info("The data is get!");
+       System.out.println(js);
+       //logger.info("The data is get!");
     }else{
        logger.warn("The data does not exist in the database!");
      }
